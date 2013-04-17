@@ -1,0 +1,15 @@
+{
+	"name": "om/omPlugins",
+	"description": "Wordpress plugin commons",
+	"minimum-stability": "stable",
+	"authors": [
+		{
+			"name": "Roman Ožana",
+			"email": "ozana@omdesign.cz"
+		}
+	],
+
+	"autoload": {
+		"classmap": ["src"]
+	}
+}
