@@ -1,4 +1,4 @@
-omPlugins
+wplugins
 =========
 
 Common elements for Wordpress plugins
