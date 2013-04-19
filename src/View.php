@@ -72,7 +72,7 @@ class View {
         return $output;
       }
     } else {
-      throw new Exception('Template file ' . $file . ' not found');
+      throw new \Exception('Template file ' . $file . ' not found');
     }
   }
 
