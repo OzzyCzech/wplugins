@@ -1,22 +1,16 @@
 <?php
 
-/**
- * Test initialization and helpers.
- *
- * @author     David Grudl
- * @package    Nette\Test
- */
-
-
-if (@!include __DIR__ . '/../vendor/autoload.php') {
+if (@!include __DIR__ . '/../../vendor/autoload.php') {
 	echo 'Install Nette Tester using `composer update --dev`';
 	exit(1);
 }
 
 
+
+// configure environment
 // configure environment
 Tester\Helpers::setup();
-class_alias('Tester\Assert', 'Assert');
+/**/class_alias('Tester\Assert', 'Assert');/**/
 date_default_timezone_set('Europe/Prague');
 $_GET = $_POST = $_COOKIE = array();
 
