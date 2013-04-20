@@ -6,108 +6,146 @@ namespace om;
  * For the full copyright and license information, please view
  * the file license.txt that was distributed with this source code.
  *
- * <code>
- * View::$dir = __DIR__ . '/tamplates/';
- *
- * // simple include phtml file
- * echo View::from('test/test.phtml');
- *
- *
- * // setup some variable
- * $view = View::from('test/test.phtml');
- * $view->variable = 'value';
- *
- * echo $view->variable; // prints 'value'
- *
- * </code>
- *
  * @author Roman Ozana <ozana@omdesign.cz>
  */
-class View {
+class View extends \stdClass {
 
-  /** @var array */
-  public $vars = array();
+	/** @var $file */
+	protected $template;
 
-  /** @var string */
-  public static $dir;
+	/** @var array */
+	protected $vars = array();
 
-  /** @var $file */
-  public $file;
+	/** @var string */
+	public static $dir;
 
-  /**
-   * @param $file
-   * @return View
-   */
-  public static function from($file) {
-    return new View($file);
-  }
+	/**
+	 * Create new View instance
+	 *
+	 * @param $file
+	 * @param string|null $dir
+	 * @return View
+	 */
+	public static function from($file, $dir = null) {
+		return new View($file, $dir);
+	}
 
-  /**
-   * @param $file
-   */
-  public function __construct($file) {
-    $this->file = $file;
-  }
+	/**
+	 * @param string $template
+	 * @param string $dir
+	 * @throws Exception
+	 */
+	public function __construct($template = null, $dir = null) {
+		if ($template) $this->setTemplate($template);
+		if ($dir) $this->setTemplateDir($dir);
+	}
 
-  /**
-   * Render View
-   *
-   * @throws Exception
-   * @internal param $name
-   */
-  public function render($return = false) {
-    extract($this->vars);
-    if (
-      file_exists($file = $this->file) ||
-      file_exists($file = View::$dir . $this->file) ||
-      file_exists($file = View::$dir . $this->file . '.phtml') ||
-      file_exists($file = View::$dir . $this->file . '.php')
-    ) {
-      if ($return) ob_start();
+	/**
+	 * Setup template file
+	 *
+	 * @param $template
+	 * @throws Exception
+	 */
+	public function setTemplate($template) {
+		$dir = $this->getTemplateDir();
+		if (
+			is_file($set = $template) ||
+			is_file($set = $template . '.phtml') ||
+			is_file($set = $template . '.php') ||
+			is_file($set = $dir . $template) ||
+			is_file($set = $dir . $template . '.phtml') ||
+			is_file($set = $dir . $template . '.php')
+		) {
+			$this->template = $set;
+		} else {
+			throw new Exception('Template file "' . $template . '" not found.');
+		}
+	}
 
-      include($file);
+	/**
+	 * Render View
+	 *
+	 * @throws Exception
+	 * @internal param $name
+	 */
+	public function render($template = null) {
+		if ($template) $this->setTemplate($template);
+		if (file_exists($this->template)) {
+			extract($this->vars);
+			include($this->template);
+		}
+	}
 
-      if ($return) {
-        $output = ob_get_clean();
-        return $output;
-      }
-    } else {
-      throw new \Exception('Template file ' . $file . ' not found');
-    }
-  }
 
+	/**
+	 * Return variable value if exists
+	 *
+	 * @param string $name
+	 * @throws Exception
+	 * @return mixed
+	 */
+	public function __get($name) {
+		if (array_key_exists($name, $this->vars)) {
+			return $this->vars[$name];
+		} else {
+			throw new Exception('Variable ' . $name . ' not found');
+		}
+	}
 
-  /**
-   * @param string $name
-   */
-  public function __get($name) {
-    return $this->vars[$name];
-  }
+	/**
+	 * @param mixed $name
+	 * @param mixed $value
+	 */
+	public function __set($name, $value) {
+		$this->vars[$name] = $value;
+	}
 
-  /**
-   * @param mixed $name
-   * @param mixed $value
-   */
-  public function __set($name, $value) {
-    $this->vars[$name] = $value;
-  }
+	/**
+	 * Check if some variable isset
+	 *
+	 * @param string $name
+	 * @return bool
+	 */
+	public function __isset($name) {
+		return isset($this->vars[$name]);
+	}
 
-  /**
-   * Check if some variable isset
-   *
-   * @param string $name
-   * @return bool
-   */
-  public function __isset($name) {
-    return isset($this->vars[$name]);
-  }
+	/**
+	 * Set template dir
+	 *
+	 * @param $dir
+	 * @return void
+	 */
+	public function setTemplateDir($dir) {
+		View::$dir = $dir;
+	}
 
-  /**
-   * Return view as string
-   *
-   * @return string
-   */
-  public function __toString() {
-    return $this->render(true);
-  }
+	/**
+	 * @return mixed
+	 */
+	public function getTemplate() {
+		return $this->template;
+	}
+
+	/**
+	 * Return current template dir
+	 *
+	 * @return string
+	 */
+	public static function getTemplateDir() {
+		return View::$dir;
+	}
+
+	/**
+	 * Return view as string
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		ob_start();
+		$this->render();
+		$content = ob_get_contents();
+		ob_end_clean();
+		return $content;
+	}
 }
