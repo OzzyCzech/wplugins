@@ -21,7 +21,7 @@ class Options {
 	 */
 	public function __construct($name = null, array $default = array()) {
 		if ($name === null && __CLASS__ !== get_class($this)) {
-			throw new \Exception('Invalid Options name');
+			throw new Exception('Invalid Options name');
 		}
 
 		$this->name = ($name) ? : get_class($this);
