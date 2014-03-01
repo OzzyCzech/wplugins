@@ -19,6 +19,9 @@ abstract class Model {
 	/** @var string */
 	public static $prefix;
 
+	/** @var string */
+	public static $table;
+
 	/** @var bool */
 	protected $exists = false;
 
@@ -167,7 +170,13 @@ abstract class Model {
 	 */
 	public static function table($name = null) {
 		if (!is_null($name)) return static::$prefix . $name;
-		return static::$prefix . static::$table;
+		
+		if (static::$table) {
+			return static::$prefix . static::$table;
+		} else {
+			$class = explode('\\', get_called_class());
+			return static::$prefix . array_pop($class);
+		}
 	}
 
 	/**
