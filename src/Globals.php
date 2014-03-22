@@ -65,19 +65,7 @@ class Globals {
 	 * @return mixed
 	 */
 	public static function __callStatic($name, $args) {
+		return $GLOBALS[$name];
 		return is_array($var = self::get($name)) && !empty($args) ? $var[reset($args)] : $var;
-	}
-
-	/**
-	 * @param string $name
-	 * @return mixed
-	 * @throws Exception
-	 */
-	private static function &get($name) {
-		if (array_key_exists($name, $GLOBALS)) {
-			return $GLOBALS[$name];
-		} else {
-			throw new Exception('Variable ' . $name . ' not exists');
-		}
 	}
 }
