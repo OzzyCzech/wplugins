@@ -65,7 +65,6 @@ class Globals {
 	 * @return mixed
 	 */
 	public static function __callStatic($name, $args) {
-		return $GLOBALS[$name];
-		return is_array($var = self::get($name)) && !empty($args) ? $var[reset($args)] : $var;
+		return isset($GLOBALS[$name]) ? $GLOBALS[$name] : null;
 	}
 }
