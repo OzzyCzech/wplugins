@@ -1,7 +1,7 @@
 New BSD License
 ---------------
 
-Copyright (c) 2013 Roman Ožana (http://www.omdesign.cz)
+Copyright (c) 2013 Roman Ožana (https://ozana.cz)
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

@@ -4,7 +4,7 @@ namespace om;
  * Return all Wordpress Globals variable
  *
  * @see http://codex.wordpress.org/Global_Variables
- * @author Roman Ozana <ozana@omdesign.cz>
+ * @author Roman Ozana <roman@ozana.cz>
  *
  * @method static \WP_Post post()
  * @method static authordata()

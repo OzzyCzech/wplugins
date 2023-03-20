@@ -1,7 +1,7 @@
 <?php
 namespace om;
 /**
- * @author Roman Ozana <ozana@omdesign.cz>
+ * @author Roman Ozana <roman@ozana.cz>
  */
 class View extends \stdClass {
 
